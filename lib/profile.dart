@@ -12,45 +12,70 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ProfileScreen(),
+      home: LoginScreen(),
     );
   }
 }
 
-class ProfileScreen extends StatelessWidget {
-  // Fungsi untuk mengirim permintaan API untuk edit profile
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late String username = "";
+  late String email = "";
+
+  @override
+  void initState() {
+    super.initState();
+    // fetchProfileData();
+  }
+
+  Future<void> fetchProfileData() async {
+    try {
+      // var response = await Dio().get(
+      //   'http://10.0.2.2:8000/api/login', // Ganti dengan URL yang sesuai
+      // );
+
+      // var data = response.data;
+
+      // setState(() {
+      //   username = data['username'];
+      //   email = data['email'];
+      // });
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
   Future<void> editProfile(String newName, String newEmail) async {
     try {
       var response = await Dio().put(
-        'https://example.com/api/edit_profile',
+        'http://10.0.2.2:8000/api/admin/update',
         data: {
           'name': newName,
           'email': newEmail,
         },
       );
 
-      // Tambahkan logika untuk menangani respons dari API
-      print(response.data); // Cetak respons dari API jika diperlukan
+      print(response.data);
     } catch (error) {
-      // Tangani error jika permintaan gagal
       print(error.toString());
     }
   }
 
-  // Fungsi untuk mengirim permintaan API untuk edit password
   Future<void> editPassword(String newPassword) async {
     try {
       var response = await Dio().put(
-        'https://example.com/api/edit_password',
+        'http://10.0.2.2:8000/api/admin/update',
         data: {
           'password': newPassword,
         },
       );
 
-      // Tambahkan logika untuk menangani respons dari API
-      print(response.data); // Cetak respons dari API jika diperlukan
+      print(response.data);
     } catch (error) {
-      // Tangani error jika permintaan gagal
       print(error.toString());
     }
   }
@@ -60,19 +85,38 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
-        leading: IconButton(
-          icon: Icon(
-              Icons.arrow_back), // Replace with your custom back icon if needed
-          onPressed: () {
-            // Navigate back to the home screen
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(),
-              ),
-            );
-          },
-        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              // Tampilkan dialog konfirmasi sebelum logout
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Logout'),
+                  content: Text('Apakah Anda yakin ingin keluar?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Batal'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // Lakukan operasi logout
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()),
+                        );
+                      },
+                      child: Text('Logout'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -89,7 +133,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    'Abdillah Hasan',
+                    username,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
@@ -98,7 +142,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 5.0),
                   Text(
-                    'abdillahhasan@example.com',
+                    email,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16.0,
@@ -122,43 +166,6 @@ class ProfileScreen extends StatelessWidget {
               EditPasswordScreen(
                 editPassword: editPassword,
               ),
-            ),
-            buildProfileOption(
-              context,
-              Icons.logout,
-              'Logout',
-              ProfileScreen(),
-              onPressed: () {
-                // Show a confirmation dialog before logging out
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Logout'),
-                    content: Text('Are you sure you want to log out?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          // Perform logout operation
-                          // ...
-
-                          // Navigate back to the HomeScreen or LoginScreen
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
-                            ),
-                          );
-                        },
-                        child: Text('Logout'),
-                      ),
-                    ],
-                  ),
-                );
-              },
             ),
           ],
         ),
@@ -194,7 +201,7 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class EditProfileScreen extends StatelessWidget {
+class EditProfileScreen extends StatefulWidget {
   final Function(String, String) editProfile;
 
   EditProfileScreen({
@@ -202,20 +209,57 @@ class EditProfileScreen extends StatelessWidget {
   });
 
   @override
+  _EditProfileScreenState createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  TextEditingController _newNameController = TextEditingController();
+  TextEditingController _newEmailController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    // Tambahkan kode untuk halaman edit profile di sini
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profile'),
       ),
-      body: Center(
-        child: Text('Halaman Edit Profile'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _newNameController,
+              decoration: InputDecoration(
+                labelText: 'New Name',
+                icon: Icon(Icons.person),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: _newEmailController,
+              decoration: InputDecoration(
+                labelText: 'New Email',
+                icon: Icon(Icons.email),
+              ),
+            ),
+            SizedBox(height: 24.0),
+            ElevatedButton(
+              onPressed: () {
+                String newName = _newNameController.text;
+                String newEmail = _newEmailController.text;
+                widget.editProfile(newName, newEmail);
+                Navigator.pop(context); // Kembali ke halaman profile
+              },
+              child: Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class EditPasswordScreen extends StatelessWidget {
+class EditPasswordScreen extends StatefulWidget {
   final Function(String) editPassword;
 
   EditPasswordScreen({
@@ -223,14 +267,53 @@ class EditPasswordScreen extends StatelessWidget {
   });
 
   @override
+  _EditPasswordScreenState createState() => _EditPasswordScreenState();
+}
+
+class _EditPasswordScreenState extends State<EditPasswordScreen> {
+  TextEditingController _newPasswordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    // Tambahkan kode untuk halaman edit password di sini
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Password'),
       ),
-      body: Center(
-        child: Text('Halaman Edit Password'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _newPasswordController,
+              decoration: InputDecoration(
+                labelText: 'New Password',
+                icon: Icon(Icons.lock),
+              ),
+              obscureText: true,
+            ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: _confirmPasswordController,
+              decoration: InputDecoration(
+                labelText: 'Confirm Password',
+                icon: Icon(Icons.lock),
+              ),
+              obscureText: true,
+            ),
+            SizedBox(height: 24.0),
+            ElevatedButton(
+              onPressed: () {
+                String newPassword = _newPasswordController.text;
+                // Add logic to compare newPassword and confirmPassword
+                widget.editPassword(newPassword);
+                Navigator.pop(context); // Kembali ke halaman profile
+              },
+              child: Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
