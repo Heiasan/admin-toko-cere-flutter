@@ -216,16 +216,14 @@ class TaskBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          TaskBarButton(
-            text: 'POS',
+          CustomTaskBarButton(
             icon: Icons.store,
             onPressed: () {
+              // ... your navigation logic
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PointOfSale(
-                            token:
-                                'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMzFiNDFiMjY4MmEyYmQyZTg5NDhkZDVmYmNlMmJmMDQwMmI1ZDFlMWMzZDcxZmIyYjUwZjdkYWVkYWZkZjJhNTc1OTYyZjk1NzIwOGJmNWUiLCJpYXQiOjE2OTEzOTQwNDguMDAyMTE3LCJuYmYiOjE2OTEzOTQwNDguMDAyMTE5LCJleHAiOjE3MjMwMTY0NDcuOTkxNDc3LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.RFTHvsu0JQSgzUxwnlfduv0gApdI1atsuoFI5NGlUxzi2bjApOcrOaNJ6aeABuo0mEwYjsRWhKU1oPoQKuFm1R-01W9Tpp0LdthmHrMQVAFetzquPHCZSTSowmnNwDj9N-D1h_a0Vi_T2RjPBzPERIMZeWECdjROBjWmpY2lk2qZp70yYi1LffbHpKwrW6B61lQeTd8RzNsarnSNuUNMdREtrPiaEDePDPeCZuw9gTRZcRj57qRgZSPipT1XufbMV-0ZIaM3Qiyhr_47vxRwLMaoK3DywXeSH6v5xWH88ed1jtIuyu_473LkBnFSxVAoZzQtFhC4Qt3dALy8ZHe9HRQdG6do--1kcVorlRch39_kgtwSGnG55JqhtLETp-MPi3aI7mByK8zQANSNAeaWIchIj-h7pl-CDVSR4UK_TipAWclCNchtbhi5IK4DUaXxAS-wywopzbRJ_gOCHQiiZDHgH0D6K-zDOKQoifsCVpnQT8ZfqaRdmAWiXmCYGYr5NcB98WEjSQETU4V9JmrggKxIZFFqRDORrJVUshdi3AH_zXYnD3uGc08gHvhBP8pGW74tPyk7uiU2Uu0a5jLucYCGuk6eeJ6cSwo3a1ERtITHF1Yqq2D_w779tH107EvEmlp4cwF5e6iFMqqxGzkpTn6Kb7B837PNzWJvzAoXaeU',
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PointOfSale(
                             data: {
                               "product": [
                                 {
@@ -257,23 +255,29 @@ class TaskBar extends StatelessWidget {
                                 }
                               ],
                             },
-                          )));
+                            token:
+                                'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMzFiNDFiMjY4MmEyYmQyZTg5NDhkZDVmYmNlMmJmMDQwMmI1ZDFlMWMzZDcxZmIyYjUwZjdkYWVkYWZkZjJhNTc1OTYyZjk1NzIwOGJmNWUiLCJpYXQiOjE2OTEzOTQwNDguMDAyMTE3LCJuYmYiOjE2OTEzOTQwNDguMDAyMTE5LCJleHAiOjE3MjMwMTY0NDcuOTkxNDc3LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.RFTHvsu0JQSgzUxwnlfduv0gApdI1atsuoFI5NGlUxzi2bjApOcrOaNJ6aeABuo0mEwYjsRWhKU1oPoQKuFm1R-01W9Tpp0LdthmHrMQVAFetzquPHCZSTSowmnNwDj9N-D1h_a0Vi_T2RjPBzPERIMZeWECdjROBjWmpY2lk2qZp70yYi1LffbHpKwrW6B61lQeTd8RzNsarnSNuUNMdREtrPiaEDePDPeCZuw9gTRZcRj57qRgZSPipT1XufbMV-0ZIaM3Qiyhr_47vxRwLMaoK3DywXeSH6v5xWH88ed1jtIuyu_473LkBnFSxVAoZzQtFhC4Qt3dALy8ZHe9HRQdG6do--1kcVorlRch39_kgtwSGnG55JqhtLETp-MPi3aI7mByK8zQANSNAeaWIchIj-h7pl-CDVSR4UK_TipAWclCNchtbhi5IK4DUaXxAS-wywopzbRJ_gOCHQiiZDHgH0D6K-zDOKQoifsCVpnQT8ZfqaRdmAWiXmCYGYr5NcB98WEjSQETU4V9JmrggKxIZFFqRDORrJVUshdi3AH_zXYnD3uGc08gHvhBP8pGW74tPyk7uiU2Uu0a5jLucYCGuk6eeJ6cSwo3a1ERtITHF1Yqq2D_w779tH107EvEmlp4cwF5e6iFMqqxGzkpTn6Kb7B837PNzWJvzAoXaeU')),
+              );
             },
           ),
-          TaskBarButton(
-            text: 'CRUDProduk',
+          CustomTaskBarButton(
             icon: Icons.shopping_bag,
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CRUDProduk()));
+              // ... your navigation logic
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CRUDProduk()),
+              );
             },
           ),
-          TaskBarButton(
-            text: 'Profile',
+          CustomTaskBarButton(
             icon: Icons.person,
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()));
+              // ... your navigation logic
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
             },
           ),
         ],
@@ -282,21 +286,57 @@ class TaskBar extends StatelessWidget {
   }
 }
 
-class TaskBarButton extends StatelessWidget {
-  final String text;
+class CustomTaskBarButton extends StatefulWidget {
   final IconData icon;
   final VoidCallback onPressed;
 
-  TaskBarButton(
-      {required this.text, required this.icon, required this.onPressed});
+  CustomTaskBarButton({
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  _CustomTaskBarButtonState createState() => _CustomTaskBarButtonState();
+}
+
+class _CustomTaskBarButtonState extends State<CustomTaskBarButton> {
+  bool _isPressed = false;
+
+  void _handleTapDown(_) {
+    setState(() {
+      _isPressed = true;
+    });
+  }
+
+  void _handleTapUp(_) {
+    setState(() {
+      _isPressed = false;
+    });
+    widget.onPressed();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon),
-      label: Text(text),
-      style: TextButton.styleFrom(primary: Colors.blue),
+    return GestureDetector(
+      onTapDown: _handleTapDown,
+      onTapUp: _handleTapUp,
+      onTapCancel: () {
+        setState(() {
+          _isPressed = false;
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: _isPressed ? Colors.blue.withOpacity(0.7) : Colors.blue,
+        ),
+        child: Icon(
+          widget.icon,
+          color: Colors.white,
+          size: _isPressed ? 28 : 32,
+        ),
+      ),
     );
   }
 }

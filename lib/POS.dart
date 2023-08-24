@@ -3,6 +3,7 @@ import 'package:badges/badges.dart' as badge;
 import 'package:dio/dio.dart';
 import 'HomeScreen.dart';
 import 'PaymentPage.dart';
+import 'constants/apis.dart';
 
 void main() {
   runApp(MyApp(
@@ -84,10 +85,10 @@ class _PointOfSaleState extends State<PointOfSale> {
 
   Future<void> _fetchProducts() async {
     try {
-      final response = await Dio().get('http://10.0.2.2:8000/api/products');
+      final response = await Dio().get("${Apis.getProduct}");
       if (response.statusCode == 200) {
         setState(() {
-          _products = List<Map<String, dynamic>>.from(response.data);
+          _products = List<Map<String, dynamic>>.from(response.data['data']);
           _isLoading = false;
         });
       } else {

@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:login_dio/HomeScreen.dart';
 import 'package:login_dio/main.dart';
 import 'constants/apis.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CRUDProduk extends StatefulWidget {
   const CRUDProduk({Key? key}) : super(key: key);
@@ -16,26 +17,39 @@ class _CRUDProdukState extends State<CRUDProduk> {
   bool _isLoading = false;
 
   final Dio _dio = Dio();
+  final _storage = FlutterSecureStorage();
+  String shopId = '';
 
   @override
   void initState() {
     super.initState();
-    _fetchProducts();
+    initShopId().then((_) {
+      _fetchProducts();
+    });
+  }
+
+  Future initShopId() async {
+    shopId = await _storage.read(key: 'shop_id') ?? '';
   }
 
   Future<void> _fetchProducts() async {
     setState(() {
       _isLoading = true;
     });
-
     try {
-      final response = await _dio.get('http://10.0.2.2:8000/api/products');
+      final response = await _dio.get("${Apis.getProductshopId}/$shopId");
       if (response.statusCode == 200) {
         setState(() {
-          _products = List<Map<String, dynamic>>.from(response.data['data']);
+          _products =
+              List<Map<String, dynamic>>.from(response.data['data']['product']);
           _isLoading = false;
         });
+        // setState(() {
+        //   _products = Map<String, dynamic>.from(response.data['data']);
+        //   _isLoading = false;
+        // });
       } else {
+        print('gagal get produk ');
         throw Exception('Failed to fetch products');
       }
     } catch (error) {
@@ -52,14 +66,14 @@ class _CRUDProdukState extends State<CRUDProduk> {
     });
 
     try {
-      final response = await _dio.put(
-        'http://10.0.2.2:8000/api/products/1',
-        data: {
-          'name': newName,
-        },
-      );
+      final response = await _dio.get("${Apis.updateProduct}/$shopId");
 
       if (response.statusCode == 200) {
+        setState(() {
+          _products =
+              List<Map<String, dynamic>>.from(response.data['data']['product']);
+          _isLoading = false;
+        });
         print('Product updated successfully: $productId, $newName');
         _fetchProducts();
       } else {
@@ -126,12 +140,12 @@ class _CRUDProdukState extends State<CRUDProduk> {
                   child: Card(
                     elevation: 2.0,
                     child: ListTile(
-                      leading: Image.network(
-                        product['imageUrl'],
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                      ),
+                      // leading: Image.network(
+                      //   product['imageUrl'],
+                      //   width: 60,
+                      //   height: 60,
+                      //   fit: BoxFit.cover,
+                      // ),
                       title: Text(product['name']),
                       subtitle: Text('Price: \$${product['price']}'),
                       trailing: Row(
